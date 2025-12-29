@@ -1,25 +1,25 @@
-// ================================
+
 // IMPORTS
-// ================================
+
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
 const ExcelJS = require('exceljs');
 
-// ================================
+
 // APP SETUP
-// ================================
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ================================
+
 // DATABASE CONNECTION
-// ================================
+
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Roktim@01',   // keep your password
+    password: 'Your Database Password',   
     database: 'scada_db'
 });
 
@@ -31,16 +31,16 @@ db.connect(err => {
     console.log('✅ MySQL connected successfully');
 });
 
-// ================================
+
 // TEST ROUTE
-// ================================
+
 app.get('/', (req, res) => {
     res.send('Backend is running successfully');
 });
 
-// ================================
+
 // DRILLING RTDMM API
-// ================================
+
 app.post('/api/drilling', (req, res) => {
     const {
         date,
@@ -79,9 +79,9 @@ app.post('/api/drilling', (req, res) => {
     );
 });
 
-// ================================
+
 // PRODUCTION SCADA API
-// ================================
+
 app.post('/api/production', (req, res) => {
     const { production, location, availability, remark } = req.body;
 
@@ -104,9 +104,9 @@ app.post('/api/production', (req, res) => {
     );
 });
 
-// ================================
+
 // EXCEL EXPORT API (FINAL)
-// ================================
+
 app.get('/api/export-excel', async (req, res) => {
     try {
         const [drillingResults] = await db.promise().query('SELECT * FROM drilling_rtdmm');
@@ -240,10 +240,11 @@ app.get('/api/export-excel', async (req, res) => {
     }
 });
 
-// ================================
+
 // START SERVER
-// ================================
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
+
